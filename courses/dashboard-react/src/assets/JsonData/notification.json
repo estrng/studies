@@ -1,0 +1,22 @@
+[
+    {
+        "icon": "bx bx-error",
+        "content": "Atualização 2021"
+    },
+    {
+        "icon": "bx bx-package",
+        "content": "Você tem 2 mensagens pendentes"
+    },
+    {
+        "icon": "bx bx-cart",
+        "content": "Luiza Manoela realizou 2 pedidos agora"
+    },
+    {
+        "icon": "bx bx-error",
+        "content": "Novos pedidos enviados"
+    },
+    {
+        "icon": "bx bx-cart",
+        "content": "Luís Manuel realizou 1 pedido ontem"
+    }
+]
