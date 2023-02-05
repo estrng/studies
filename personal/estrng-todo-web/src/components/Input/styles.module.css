@@ -1,0 +1,16 @@
+.input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  width: 380px;
+  height: 38px;
+
+  border-radius: 8px;
+
+  background: var(--gray-700);
+  color: aliceblue;
+  text-align: start;
+  align-items: center;
+  font-size: 14px;
+}
