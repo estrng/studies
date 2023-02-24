@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>estrng covid19 dashbord</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <link rel="stylesheet" href="/src/styles/page.css" />
+    <link rel="stylesheet" href="/src/styles/daily.css" />
+  </head>
+  <body class="main">
+    <section class="container">
+      <div id="summary" class="summary-container"></div>
+      <div id="chart-area" class="chart-container"></div>
+    </section>
+    <section id="chart-bar-container" class="chart-bar-container-section">
+      <div id="chart-bar" class="chart-bar-container"></div>
+    </section>
+    <!-- <h1>Informações diárias</h1> -->
+    <section id="daily-data" class="daily-data-section">
+      <div id="daily-first-row" class="daily-first-row">
+        <div class="input-card">
+          <div class="card-body">
+            <div class="label-container">
+              <p class="input-card-label">Star date</p>
+            </div>
+            <div class="input-container">
+              <input
+                placeholder="2020/10/10"
+                type="date"
+                name="starDate"
+                id="stardDate"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="input-card">
+          <div class="card-body">
+            <div class="label-container">
+              <p class="input-card-label">End date</p>
+            </div>
+            <div class="input-container">
+              <input
+                placeholder="2022/10/10"
+                type="date"
+                name="endDate"
+                id="endDate"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="input-card">
+          <div class="card-body">
+            <div class="label-container">
+              <p class="input-card-label">País</p>
+            </div>
+            <div class="input-container">
+              <select id="coutries" title="Pais" name="Pais">
+                <option value="Brazil">Brazil</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="input-card">
+          <div class="card-body">
+            <div class="label-container">
+              <p class="input-card-label">Dados</p>
+            </div>
+            <div class="input-container">
+              <select title="data" name="data" id="data">
+                <option value="Confirmed">Casos confirmados</option>
+                <option value="Deaths">Número de mortes</option>
+                <option value="Recovered">Casos recuperados</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="input-card">
+          <div class="card-body">
+            <div class="label-container">
+              <p class="input-card-label">Aplicar filtros</p>
+            </div>
+            <div class="input-container">
+              <button type="button" id="apply">Aplicar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="daily-second-row" class="daily-second-row">
+        <div id="chart-line" class="chart-line-container"></div>
+      </div>
+      <div id="daily-third-row" class="daily-third-row">
+        <div class="card-summary">
+          <h2 class="card-summary-label">Casos confirmados</h2>
+          <h1 id="totalConfirmedValue" class="card-summary-number"></h1>
+        </div>
+        <div class="card-summary">
+          <h2 class="card-summary-label">Total de mortes</h2>
+          <h1 id="totalDeathsValue" class="card-summary-number"></h1>
+        </div>
+        <div class="card-summary">
+          <h2 class="card-summary-label">Total de recuperados</h2>
+          <h1 id="totalRecoveredValue" class="card-summary-number"></h1>
+        </div>
+      </div>
+    </section>
+    <script type="module" src="/index.js"></script>
+  </body>
+</html>
