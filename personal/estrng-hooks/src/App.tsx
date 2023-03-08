@@ -2,31 +2,26 @@ import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 import { useAsync } from './hooks/useAsync'
+import { useGitHub } from "./services/gitHub";
+
+interface User {
+  name: string;
+  avatar_url: string;
+  bio: string;
+}
 
 function App() {
+  const { callGitHubData } = useGitHub();
+  //const gitUser = '123rqfeqavawerbvarvbqwvcq243t32vr\vb';
+  const gitUser = 'estrng';
   const [count, setCount] = useState(0)
-  const { data, status, error, run} = useAsync()
-
-  async function callGitHubData() {
-    return fetch('https://api.github.com/users/estrng', {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json;charset=UTF-8',
-      },
-    }).then(async response => {
-      return await response.json()
-    })
-  }
+  const { data: gitData, status, error, run} = useAsync<User>({status: gitUser ? 'pending' : 'idle'})
 
   useEffect(() => {
-    if (!data) return
-    run(callGitHubData())
+    if (!gitUser) return
+    run(callGitHubData(gitUser))
   }, [])
   
-  console.log("DATA DO USEASYNC", data)
-  console.log("status DO USEASYNC", status)
-  console.log("error DO USEASYNC", error)
-
   return (
     <div className="App">
       <div>
@@ -38,6 +33,17 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
+      {status === 'pending' && <div>Loading...</div>}
+      {status === 'resolved' && (
+        <div>
+          <h2>{gitData?.name}</h2>
+          <img src={gitData?.avatar_url} alt={gitData?.name} />
+          <p>{gitData?.bio}</p>
+        </div>
+      )}
+      {status === 'rejected' && <div>
+        <h2>{error?.message}</h2>
+      </div>}
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}

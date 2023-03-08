@@ -1,36 +1,33 @@
 import { useReducer } from "react";
-import { IddleState, Nullable, State, Event } from "./types";
+import { State, Event, IddleState, Nullable } from "./types";
+import {  ASYNC_INITIAL_STATE } from "./consts";
 
-
+// 
 export function useAsyncReducer<DataT, ErrorT = string>(
-  initialData: Nullable<DataT> = null
+  initialData: Nullable<IddleState> = null
 ) {
-  const initialState: IddleState<DataT> = {
-    status: "idle",
-    data: initialData,
-    error: null,
-  };
+  
 
   function fetchReducer(
     state: State<DataT, ErrorT>,
     event: Event<DataT, ErrorT>
   ): State<DataT, ErrorT> {
     switch (event.type) {
-      case "FETCH":
+      case 'PENDING':
         return {
-          ...state,
-          status: "loading",
+          status: "pending",
+          data: null,
           error: null
         };
-      case "RESOLVE":
+      case "RESOLVED":
         return {
-          status: "success",
+          status: "resolved",
           data: event.data,
           error: null
         };
-      case "REJECT":
+      case "REJECTED":
         return {
-          status: "failure",
+          status: "rejected",
           data: null,
           error: event.error,
         };
@@ -39,5 +36,11 @@ export function useAsyncReducer<DataT, ErrorT = string>(
     }
   }
 
-  return useReducer(fetchReducer, initialState);
+  return useReducer(
+    fetchReducer,
+    {
+      ...ASYNC_INITIAL_STATE,
+      ...initialData
+    } as State<DataT, ErrorT>
+  )
 }
