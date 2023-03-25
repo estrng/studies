@@ -6,9 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "j:svr": "json-server --watch  src\\__tests__\\mocks\\json\\db.json  --port 3333",
+    "n:svr": "node  src\\__tests__\\mocks\\json\\server.js"
   },
   "dependencies": {
+    "axios": "^1.3.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -16,6 +19,7 @@
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^3.1.0",
+    "json-server": "^0.17.3",
     "typescript": "^4.9.3",
     "vite": "^4.1.0"
   }

@@ -1,27 +1,34 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
-import { useAsync } from './hooks/useAsync'
+import { useCallback, useEffect, useState } from "react";
+import reactLogo from "./assets/react.svg";
 import { useGitHub } from "./services/gitHub";
-
-interface User {
-  name: string;
-  avatar_url: string;
-  bio: string;
-}
+import "./App.css";
+import { User } from "./services/gitHubServices.types";
 
 function App() {
-  const { callGitHubData } = useGitHub();
-  //const gitUser = '123rqfeqavawerbvarvbqwvcq243t32vr\vb';
-  const gitUser = 'estrng';
-  const [count, setCount] = useState(0)
-  const { data: gitData, status, error, run} = useAsync<User>({status: gitUser ? 'pending' : 'idle'})
+  const gitUser = "estrng";
+  const { callGitHubDataAxios } = useGitHub();
+  const [count, setCount] = useState(0);
+  const [gitData, setGitData] = useState<User>({} as User);
 
+  /**
+   * Implemntação simples async, sem then e catch ou try e catch,
+   * usando dados abstraidos da camada de serviço
+   */
+  const getGitHubData = useCallback(async () => {
+    if (!gitUser) return;
+    const { user, error } = await callGitHubDataAxios(gitUser);
+    if (error) alert(error.message);
+    setGitData(user);
+  }, []);
+
+  /**
+   * Nesse caso não foi possivel usar useEffect(getGitHubData, [getGitHubData])
+   * pois a função getGitHubData é assincrona e o useEffect não aceita na função de limpeza.
+   */
   useEffect(() => {
-    if (!gitUser) return
-    run(callGitHubData(gitUser))
-  }, [])
-  
+    getGitHubData();
+  }, [getGitHubData]);
+
   return (
     <div className="App">
       <div>
@@ -33,17 +40,21 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      {status === 'pending' && <div>Loading...</div>}
-      {status === 'resolved' && (
+      {/* status === "pending" */ !gitData && <div>Loading...</div>}
+      {
+        /* status === "resolved" */ gitData && (
+          <div>
+            <h2>{gitData?.name}</h2>
+            <img src={gitData?.avatar_url} alt={gitData?.name} />
+            <p>{gitData?.bio}</p>
+          </div>
+        )
+      }
+      {/* {status === "rejected" && (
         <div>
-          <h2>{gitData?.name}</h2>
-          <img src={gitData?.avatar_url} alt={gitData?.name} />
-          <p>{gitData?.bio}</p>
+          <h2>{error?.message}</h2>
         </div>
-      )}
-      {status === 'rejected' && <div>
-        <h2>{error?.message}</h2>
-      </div>}
+      )} */}
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
@@ -56,7 +67,7 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

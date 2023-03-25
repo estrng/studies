@@ -1,36 +1,43 @@
+import apiGithub from "../api/api.github";
+import {
+  IGetPaginatedResponse,
+  IGetTPaginatedResponse,
+  IGetUserResponse,
+  User,
+} from "./gitHubServices.types";
 
+const GIT_API_URL = "https://api.github.com";
+const JSON_API_URL = "http://localhost:3333";
 
-/**
- * Pode-se usar um services como esse para fazer requisições a uma API externa,
- * e tratar os dados de forma mais organizada.
- * 
- */
 export function useGitHub() {
-  async function callGitHubData(user: string) {
-    return fetch(`https://api.github.com/users/${user}`, {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json;charset=UTF-8',
-      },
-    }).then(async response => {
-      if (response.ok) return await response.json()
-      else return Promise.reject(await response.json())      
-    })
+  async function callGitHubDataAxios(user: string): Promise<IGetUserResponse> {
+    const { data, error } = await apiGithub.get<User>(
+      `${GIT_API_URL}/users/${user}`
+    );
+
+    return {
+      user: data,
+      error,
+    };
   }
 
-  async function callGitHubRepos(user: string) {
-    return fetch(`https://api.github.com/users/${user}/repos`, {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json;charset=UTF-8',
-      },
-    }).then(async response => {
-      if (response.ok) return await response.json()
-      else return Promise.reject(await response.json())
-    })
+  async function callTWithPagination<T>(
+    user: string,
+    page: number,
+    perPage: number
+  ): Promise<IGetTPaginatedResponse<T>> {
+    const { data, error } = await apiGithub.get<IGetPaginatedResponse<T>>(
+      `https://api.github.com/users/${user}/repos?page=${page}&per_page=${perPage}`
+    );
+
+    return {
+      paginationData: data,
+      error,
+    };
   }
 
   return {
-    callGitHubData,
-  }
+    callGitHubDataAxios,
+    callTWithPagination,
+  };
 }
